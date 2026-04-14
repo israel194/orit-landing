@@ -640,7 +640,7 @@
       var r = await fetch('https://api.github.com/repos/' + REPO + '/contents/content.json', { headers: headers });
       if (!r.ok) throw new Error('not found');
       var data = await r.json();
-      var content = JSON.parse(atob(data.content.replace(/\n/g,'')));
+      var content = JSON.parse(decodeURIComponent(escape(atob(data.content.replace(/\n/g,'')))));
       fillFields(content);
       log('✓ תוכן נטען מ-GitHub', 'ok');
     } catch(e) {
