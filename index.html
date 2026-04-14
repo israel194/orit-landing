@@ -23,6 +23,110 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ===== ACCESSIBILITY WIDGET ===== */
+    #acc-btn {
+      position: fixed; bottom: 100px; left: 16px; z-index: 900;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #0057b8; color: #fff; border: none; cursor: pointer;
+      font-size: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 200ms, box-shadow 200ms;
+    }
+    #acc-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+    #acc-btn:focus { outline: 3px solid #ffdd00; outline-offset: 2px; }
+
+    #acc-panel {
+      position: fixed; bottom: 162px; left: 16px; z-index: 901;
+      width: 240px; background: #fff; border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25); padding: 16px;
+      direction: rtl; display: none; border: 1px solid #ddd;
+    }
+    #acc-panel.open { display: block; }
+    #acc-panel h3 {
+      font-size: 0.875rem; font-weight: 700; color: #222;
+      margin-bottom: 12px; padding-bottom: 8px;
+      border-bottom: 1px solid #eee; text-align: center;
+    }
+    .acc-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px 4px; border-bottom: 1px solid #f0f0f0;
+      font-size: 0.82rem; color: #333;
+    }
+    .acc-row:last-child { border-bottom: none; }
+    .acc-controls { display: flex; gap: 4px; align-items: center; }
+    .acc-btn-sm {
+      width: 30px; height: 30px; border-radius: 6px; border: 1px solid #ddd;
+      background: #f5f5f5; cursor: pointer; font-size: 0.85rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; color: #333;
+      transition: background 150ms;
+    }
+    .acc-btn-sm:hover { background: #0057b8; color: #fff; border-color: #0057b8; }
+    .acc-btn-sm:focus { outline: 2px solid #ffdd00; }
+    .acc-toggle {
+      width: 40px; height: 22px; border-radius: 11px; border: none;
+      background: #ccc; cursor: pointer; position: relative; transition: background 200ms;
+      flex-shrink: 0;
+    }
+    .acc-toggle::after {
+      content: ''; position: absolute; top: 3px; right: 3px;
+      width: 16px; height: 16px; border-radius: 50%; background: #fff;
+      transition: transform 200ms;
+    }
+    .acc-toggle.on { background: #0057b8; }
+    .acc-toggle.on::after { transform: translateX(-18px); }
+    .acc-reset {
+      width: 100%; margin-top: 10px; padding: 8px; border-radius: 8px;
+      background: #f5f5f5; border: 1px solid #ddd; cursor: pointer;
+      font-size: 0.8rem; color: #555; font-family: 'Assistant', sans-serif;
+      transition: background 150ms;
+    }
+    .acc-reset:hover { background: #e5e5e5; }
+
+    /* Accessibility states */
+    body.acc-high-contrast { filter: contrast(150%); }
+    body.acc-grayscale { filter: grayscale(100%); }
+    body.acc-invert { filter: invert(90%) hue-rotate(180deg); }
+    body.acc-no-anim * { animation: none !important; transition: none !important; }
+    body.acc-links a { text-decoration: underline !important; outline: 1px dashed #0057b8; }
+    body.acc-readable * { font-family: Arial, sans-serif !important; line-height: 1.8 !important; }
+
+    /* ===== COOKIE BANNER ===== */
+    #cookie-banner {
+      position: fixed; bottom: 0; right: 0; left: 0; z-index: 800;
+      background: #1a1a2a; color: #e8e8f0; padding: 14px 20px;
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      border-top: 1px solid #2e3250; font-family: 'Assistant', sans-serif;
+      direction: rtl;
+    }
+    #cookie-banner.hidden { display: none; }
+    #cookie-banner p {
+      flex: 1; font-size: 0.85rem; line-height: 1.5; min-width: 220px; color: #c0c0d0;
+    }
+    #cookie-banner a { color: #B85470; text-decoration: underline; }
+    #cookie-banner a:hover { color: #e07090; }
+    .cookie-btns { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+    #cookie-accept {
+      padding: 9px 22px; background: #B85470; color: #fff; border: none;
+      border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.875rem;
+      font-family: 'Assistant', sans-serif; transition: background 150ms; white-space: nowrap;
+    }
+    #cookie-accept:hover { background: #9a3d5c; }
+    #cookie-decline {
+      padding: 9px 16px; background: transparent; color: #7a7d9a; border: 1px solid #2e3250;
+      border-radius: 50px; cursor: pointer; font-size: 0.8rem;
+      font-family: 'Assistant', sans-serif; transition: all 150ms; white-space: nowrap;
+    }
+    #cookie-decline:hover { border-color: #7a7d9a; color: #e8e8f0; }
+
+    @media (max-width: 600px) {
+      #acc-btn { bottom: 88px; left: 12px; width: 46px; height: 46px; font-size: 1.3rem; }
+      #acc-panel { left: 12px; width: calc(100vw - 24px); bottom: 148px; }
+      #cookie-banner { padding: 12px 14px; gap: 10px; }
+      #cookie-banner p { font-size: 0.8rem; }
+    }
+  </style>
 </head>
 <body>
 
@@ -245,6 +349,62 @@
     </div>
   </div>
 
+  <!-- ===== ACCESSIBILITY WIDGET ===== -->
+  <button id="acc-btn" aria-label="תפריט נגישות" aria-expanded="false" onclick="toggleAcc()" title="תפריט נגישות">
+    ♿
+  </button>
+  <div id="acc-panel" role="dialog" aria-label="אפשרויות נגישות">
+    <h3>♿ תפריט נגישות</h3>
+    <div class="acc-row">
+      <span>גודל גופן</span>
+      <div class="acc-controls">
+        <button class="acc-btn-sm" onclick="fontSize(-1)" aria-label="הקטן גופן">A-</button>
+        <button class="acc-btn-sm" onclick="fontSize(1)" aria-label="הגדל גופן">A+</button>
+      </div>
+    </div>
+    <div class="acc-row">
+      <span>ניגודיות גבוהה</span>
+      <button class="acc-toggle" id="tog-contrast" onclick="toggleClass('acc-high-contrast','tog-contrast')" aria-pressed="false" aria-label="ניגודיות גבוהה"></button>
+    </div>
+    <div class="acc-row">
+      <span>גווני אפור</span>
+      <button class="acc-toggle" id="tog-gray" onclick="toggleClass('acc-grayscale','tog-gray')" aria-pressed="false" aria-label="גווני אפור"></button>
+    </div>
+    <div class="acc-row">
+      <span>ניגודיות הפוכה</span>
+      <button class="acc-toggle" id="tog-invert" onclick="toggleClass('acc-invert','tog-invert')" aria-pressed="false" aria-label="ניגודיות הפוכה"></button>
+    </div>
+    <div class="acc-row">
+      <span>הדגשת קישורים</span>
+      <button class="acc-toggle" id="tog-links" onclick="toggleClass('acc-links','tog-links')" aria-pressed="false" aria-label="הדגשת קישורים"></button>
+    </div>
+    <div class="acc-row">
+      <span>גופן קריא</span>
+      <button class="acc-toggle" id="tog-readable" onclick="toggleClass('acc-readable','tog-readable')" aria-pressed="false" aria-label="גופן קריא"></button>
+    </div>
+    <div class="acc-row">
+      <span>עצור אנימציות</span>
+      <button class="acc-toggle" id="tog-anim" onclick="toggleClass('acc-no-anim','tog-anim')" aria-pressed="false" aria-label="עצור אנימציות"></button>
+    </div>
+    <button class="acc-reset" onclick="resetAcc()">↺ איפוס הגדרות</button>
+    <p style="font-size:0.72rem;color:#888;margin-top:8px;text-align:center;">
+      האתר עומד בתקן נגישות ישראלי AA<br>לפניות: <a href="mailto:israel@asor-law.com" style="color:#0057b8;">israel@asor-law.com</a>
+    </p>
+  </div>
+
+  <!-- ===== COOKIE BANNER ===== -->
+  <div id="cookie-banner" role="region" aria-label="הודעת קבצי עוגיות">
+    <p>
+      אתר זה משתמש בקבצי עוגיות (Cookies) ואוסף מידע אישי לצורך שיפור החוויה, ניתוח תנועה ויצירת קשר.
+      המשך השימוש באתר מהווה הסכמה למדיניות הפרטיות שלנו.
+      <a href="takanon.html" target="_blank">לתקנון ומדיניות פרטיות</a>
+    </p>
+    <div class="cookie-btns">
+      <button id="cookie-accept" onclick="acceptCookies()">אישור והמשך</button>
+      <button id="cookie-decline" onclick="declineCookies()">דחייה</button>
+    </div>
+  </div>
+
   <!-- ===== FLOATING WHATSAPP BUTTON ===== -->
   <a href="https://wa.me/972523975659?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%95%D7%A8%D7%99%D7%AA%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%9C%20%D7%94%D7%A7%D7%91%D7%95%D7%A6%D7%94"
      class="whatsapp-float"
@@ -360,6 +520,74 @@
       setTimeout(function() {
         window.location.href = window._paymentUrl || 'https://pay.sumit.co.il/3c09bh/tsf55r/tsf4na/payment/';
       }, 1000);
+    }
+    // ===== ACCESSIBILITY =====
+    var _fontSize = 0;
+    function toggleAcc() {
+      var panel = document.getElementById('acc-panel');
+      var btn = document.getElementById('acc-btn');
+      var isOpen = panel.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen);
+    }
+    document.addEventListener('click', function(e) {
+      var panel = document.getElementById('acc-panel');
+      var btn = document.getElementById('acc-btn');
+      if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+        panel.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+    function fontSize(dir) {
+      _fontSize = Math.max(-3, Math.min(5, _fontSize + dir));
+      document.documentElement.style.fontSize = (100 + _fontSize * 8) + '%';
+      localStorage.setItem('acc_fontSize', _fontSize);
+    }
+    function toggleClass(cls, togId) {
+      var on = document.body.classList.toggle(cls);
+      var tog = document.getElementById(togId);
+      tog.classList.toggle('on', on);
+      tog.setAttribute('aria-pressed', on);
+      localStorage.setItem('acc_' + cls, on ? '1' : '');
+    }
+    function resetAcc() {
+      ['acc-high-contrast','acc-grayscale','acc-invert','acc-links','acc-readable','acc-no-anim'].forEach(function(cls) {
+        document.body.classList.remove(cls);
+        var togId = 'tog-' + cls.replace('acc-','').replace('-','');
+        var tog = document.getElementById(togId);
+        if (tog) { tog.classList.remove('on'); tog.setAttribute('aria-pressed','false'); }
+        localStorage.removeItem('acc_' + cls);
+      });
+      _fontSize = 0;
+      document.documentElement.style.fontSize = '';
+      localStorage.removeItem('acc_fontSize');
+    }
+    // Restore accessibility settings
+    (function restoreAcc() {
+      var fs = parseInt(localStorage.getItem('acc_fontSize') || '0');
+      if (fs) { _fontSize = fs; document.documentElement.style.fontSize = (100 + fs * 8) + '%'; }
+      ['acc-high-contrast','acc-grayscale','acc-invert','acc-links','acc-readable','acc-no-anim'].forEach(function(cls) {
+        if (localStorage.getItem('acc_' + cls)) {
+          document.body.classList.add(cls);
+          var togMap = {'acc-high-contrast':'contrast','acc-grayscale':'gray','acc-invert':'invert','acc-links':'links','acc-readable':'readable','acc-no-anim':'anim'};
+          var tog = document.getElementById('tog-' + togMap[cls]);
+          if (tog) { tog.classList.add('on'); tog.setAttribute('aria-pressed','true'); }
+        }
+      });
+    })();
+
+    // ===== COOKIES =====
+    (function initCookies() {
+      if (localStorage.getItem('cookie_consent')) {
+        document.getElementById('cookie-banner').classList.add('hidden');
+      }
+    })();
+    function acceptCookies() {
+      localStorage.setItem('cookie_consent', 'accepted');
+      document.getElementById('cookie-banner').classList.add('hidden');
+    }
+    function declineCookies() {
+      localStorage.setItem('cookie_consent', 'declined');
+      document.getElementById('cookie-banner').classList.add('hidden');
     }
   </script>
 
