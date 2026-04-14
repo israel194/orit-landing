@@ -30,7 +30,7 @@
   <section class="hero">
     <div class="container">
       <div class="hero__photo-wrapper">
-        <img class="hero__photo" src="4.jpeg" alt="אורית עשור, מנחת קבוצות העצמה לנשים" width="140" height="140">
+        <img class="hero__photo" id="heroPhoto" src="4.jpeg" alt="אורית עשור, מנחת קבוצות העצמה לנשים" width="140" height="140">
       </div>
 
       <span class="badge-scarcity" data-edit="badge">נותרו מקומות אחרונים — הקבוצה קטנה ואישית</span>
@@ -141,7 +141,7 @@
       <h2 class="about__title" data-edit="about_title">מי היא אורית עשור?</h2>
 
       <div class="about__photo-wrapper">
-        <img class="about__photo" src="4.jpeg" alt="אורית עשור" width="200" height="200">
+        <img class="about__photo" id="aboutPhoto" src="4.jpeg" alt="אורית עשור" width="200" height="200">
       </div>
 
       <p class="about__text" data-edit="about_text1">
@@ -164,19 +164,19 @@
       <ul class="details__list" role="list">
         <li class="details__item">
           <span class="details__icon" aria-hidden="true">📍</span>
-          רח' נחום חפצדי 17, ירושלים (מגדל רם - קומה 11)
+          <span data-edit="details_location">רח' נחום חפצדי 17, ירושלים (מגדל רם - קומה 11)</span>
         </li>
         <li class="details__item">
           <span class="details__icon" aria-hidden="true">📅</span>
-          כל יום שני
+          <span data-edit="details_day">כל יום שני</span>
         </li>
         <li class="details__item">
           <span class="details__icon" aria-hidden="true">🕗</span>
-          בשעה 20:30 — אחרי שהילדים ישנים
+          <span data-edit="details_time">בשעה 20:30 — אחרי שהילדים ישנים</span>
         </li>
         <li class="details__item">
           <span class="details__icon" aria-hidden="true">💰</span>
-          40 שקלים בלבד למפגש
+          <span data-edit="details_price">40 שקלים בלבד למפגש</span>
         </li>
       </ul>
 
@@ -255,18 +255,33 @@
   </a>
 
   <script>
-    // Load saved text from localStorage
-    (function loadEdits() {
+    // Load content from content.json
+    (async function loadContent() {
       try {
-        var saved = JSON.parse(localStorage.getItem('orit_site_content'));
-        if (!saved) return;
+        var resp = await fetch('./content.json?v=' + Date.now());
+        if (!resp.ok) return;
+        var c = await resp.json();
+
+        // Apply text to data-edit elements
         var els = document.querySelectorAll('[data-edit]');
         for (var i = 0; i < els.length; i++) {
           var key = els[i].getAttribute('data-edit');
-          if (saved[key] !== undefined && saved[key] !== '') {
-            els[i].innerHTML = saved[key];
-          }
+          if (c[key] !== undefined) els[i].innerHTML = c[key];
         }
+
+        // Apply images
+        if (c.hero_image) document.getElementById('heroPhoto').src = c.hero_image;
+        if (c.about_image) document.getElementById('aboutPhoto').src = c.about_image;
+
+        // Apply WhatsApp link
+        if (c.wa_number) {
+          var msg = encodeURIComponent(c.wa_message || '');
+          document.querySelector('.whatsapp-float').href = 'https://wa.me/' + c.wa_number + '?text=' + msg;
+        }
+
+        // Store payment URL globally
+        if (c.payment_url) window._paymentUrl = c.payment_url;
+
       } catch(e) {}
     })();
 
@@ -343,7 +358,7 @@
 
       // Redirect to Sumit payment page
       setTimeout(function() {
-        window.location.href = 'https://pay.sumit.co.il/3c09bh/tsf55r/tsf4na/payment/';
+        window.location.href = window._paymentUrl || 'https://pay.sumit.co.il/3c09bh/tsf55r/tsf4na/payment/';
       }, 1000);
     }
   </script>
