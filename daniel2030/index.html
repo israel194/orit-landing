@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ניהול תוכן — לחזור לעצמך</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Assistant', sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      direction: rtl;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .admin-header {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+
+    .admin-header h1 {
+      font-size: 1.75rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .admin-header p {
+      font-size: 0.9375rem;
+      color: #888;
+    }
+
+    .admin-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .section-group {
+      background: #16213e;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1px solid #2a2a4a;
+    }
+
+    .section-group__title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #B85470;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #2a2a4a;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #aaa;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .field textarea {
+      width: 100%;
+      min-height: 70px;
+      padding: 12px 14px;
+      border: 1.5px solid #2a2a4a;
+      border-radius: 10px;
+      background: #0f0f23;
+      color: #e0e0e0;
+      font-family: 'Assistant', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      resize: vertical;
+      transition: border-color 200ms;
+      direction: rtl;
+    }
+
+    .field textarea:focus {
+      outline: none;
+      border-color: #B85470;
+      box-shadow: 0 0 0 3px rgba(184, 84, 112, 0.2);
+    }
+
+    .field textarea.short { min-height: 44px; }
+    .field textarea.tall { min-height: 120px; }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      padding: 24px 0 40px;
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(transparent, #1a1a2e 30%);
+      padding-top: 40px;
+    }
+
+    .btn {
+      padding: 14px 36px;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Assistant', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 150ms, box-shadow 200ms;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-save {
+      background: #B85470;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(184, 84, 112, 0.35);
+    }
+
+    .btn-save:hover {
+      box-shadow: 0 6px 24px rgba(184, 84, 112, 0.5);
+    }
+
+    .btn-reset {
+      background: #2a2a4a;
+      color: #ccc;
+    }
+
+    .btn-reset:hover { background: #3a3a5a; }
+
+    .btn-preview {
+      background: transparent;
+      color: #B85470;
+      border: 1.5px solid #B85470;
+    }
+
+    .btn-preview:hover { background: rgba(184, 84, 112, 0.1); }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #25d366;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 300ms ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1>ניהול תוכן האתר</h1>
+      <p>עריכת הטקסטים של דף הנחיתה — השינויים נשמרים בדפדפן</p>
+    </div>
+
+    <!-- Hero -->
+    <div class="section-group">
+      <div class="section-group__title">חלק עליון (Hero)</div>
+      <div class="field">
+        <label>תג מוגבלות</label>
+        <textarea class="short" data-key="badge"></textarea>
+      </div>
+      <div class="field">
+        <label>כותרת ראשית</label>
+        <textarea class="short" data-key="hero_headline"></textarea>
+      </div>
+      <div class="field">
+        <label>תת-כותרת</label>
+        <textarea data-key="hero_subtext"></textarea>
+      </div>
+    </div>
+
+    <!-- Pain Point -->
+    <div class="section-group">
+      <div class="section-group__title">נקודת כאב</div>
+      <div class="field">
+        <label>טקסט רגשי (השתמשי ב-&lt;br&gt; לשבירת שורה)</label>
+        <textarea class="tall" data-key="pain_text"></textarea>
+      </div>
+      <div class="field">
+        <label>משפט מדגיש</label>
+        <textarea class="short" data-key="pain_highlight"></textarea>
+      </div>
+    </div>
+
+    <!-- Benefits -->
+    <div class="section-group">
+      <div class="section-group__title">יתרונות — 3 כרטיסים</div>
+      <div class="field">
+        <label>כותרת הסקשן</label>
+        <textarea class="short" data-key="benefits_title"></textarea>
+      </div>
+      <div class="field">
+        <label>כרטיס 1 — כותרת</label>
+        <textarea class="short" data-key="card1_title"></textarea>
+      </div>
+      <div class="field">
+        <label>כרטיס 1 — טקסט</label>
+        <textarea data-key="card1_body"></textarea>
+      </div>
+      <div class="field">
+        <label>כרטיס 2 — כותרת</label>
+        <textarea class="short" data-key="card2_title"></textarea>
+      </div>
+      <div class="field">
+        <label>כרטיס 2 — טקסט</label>
+        <textarea data-key="card2_body"></textarea>
+      </div>
+      <div class="field">
+        <label>כרטיס 3 — כותרת</label>
+        <textarea class="short" data-key="card3_title"></textarea>
+      </div>
+      <div class="field">
+        <label>כרטיס 3 — טקסט</label>
+        <textarea data-key="card3_body"></textarea>
+      </div>
+    </div>
+
+    <!-- Process -->
+    <div class="section-group">
+      <div class="section-group__title">התהליך</div>
+      <div class="field">
+        <label>כותרת</label>
+        <textarea class="short" data-key="process_title"></textarea>
+      </div>
+      <div class="field">
+        <label>פסקה 1</label>
+        <textarea data-key="process_text1"></textarea>
+      </div>
+      <div class="field">
+        <label>פסקה 2</label>
+        <textarea class="tall" data-key="process_text2"></textarea>
+      </div>
+      <div class="field">
+        <label>פסקה 3</label>
+        <textarea data-key="process_text3"></textarea>
+      </div>
+    </div>
+
+    <!-- Testimonial -->
+    <div class="section-group">
+      <div class="section-group__title">המלצה</div>
+      <div class="field">
+        <label>טקסט ההמלצה</label>
+        <textarea class="tall" data-key="testimonial_text"></textarea>
+      </div>
+      <div class="field">
+        <label>שם הממליצה</label>
+        <textarea class="short" data-key="testimonial_cite"></textarea>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="section-group">
+      <div class="section-group__title">אודות אורית</div>
+      <div class="field">
+        <label>כותרת</label>
+        <textarea class="short" data-key="about_title"></textarea>
+      </div>
+      <div class="field">
+        <label>פסקה 1</label>
+        <textarea data-key="about_text1"></textarea>
+      </div>
+      <div class="field">
+        <label>פסקה 2</label>
+        <textarea data-key="about_text2"></textarea>
+      </div>
+      <div class="field">
+        <label>פסקה 3</label>
+        <textarea data-key="about_text3"></textarea>
+      </div>
+    </div>
+
+    <!-- Details -->
+    <div class="section-group">
+      <div class="section-group__title">פרטים</div>
+      <div class="field">
+        <label>כותרת</label>
+        <textarea class="short" data-key="details_title"></textarea>
+      </div>
+      <div class="field">
+        <label>הערה מתחת לכפתור</label>
+        <textarea class="short" data-key="cta_note"></textarea>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="btn btn-save" onclick="saveAll()">שמירת שינויים</button>
+      <a class="btn btn-preview" href="../" target="_blank">תצוגה מקדימה</a>
+      <button class="btn btn-reset" onclick="resetAll()">איפוס לברירת מחדל</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">השינויים נשמרו בהצלחה!</div>
+
+  <script>
+    var STORAGE_KEY = 'orit_site_content';
+
+    // Default values from the site
+    var defaults = {
+      badge: 'נותרו מקומות אחרונים — הקבוצה קטנה ואישית',
+      hero_headline: 'לחזור לעצמך..',
+      hero_subtext: 'כי את לא צריכה לבחור בין להיות אמא מדהימה, אשת קריירה מצליחה ואישה שמחה. את יכולה להיות את כולן.',
+      pain_text: 'את רצה מהבוקר עד הלילה.<br>\nעבודה, ילדים, בית, זוגיות — והכל דחוף.<br>\nובסוף היום, כשסוף סוף יש רגע של שקט,<br>\nאת מרגישה ריקה. כאילו כולם קיבלו ממך — חוץ ממך.',
+      pain_highlight: 'הגיע הזמן שתחזרי לעצמך.',
+      benefits_title: 'מה תקבלי במפגשים?',
+      card1_title: 'זוגיות שפורחת',
+      card1_body: 'לדעת לתקשר בלי להיפגע, לחזק את הקשר גם כשהחיים עמוסים, ולהרגיש שוב שותפות אמיתית.',
+      card2_title: 'אמא ברוגע',
+      card2_body: 'להפסיק להרגיש אשמה, לקבל כלים שעובדים ברגע האמת ולגדל ילדים מתוך חיבור — לא מתוך תשישות.',
+      card3_title: 'להכיר את עצמך מחדש',
+      card3_body: 'לגלות מה באמת חשוב לך, להבין למה את מגיבה כמו שאת מגיבה, ולהתחיל לבחור — במקום להגיב.',
+      process_title: 'מ״אישה שמגיבה״ ל״אישה שבוחרת״',
+      process_text1: 'את לא צריכה עוד טיפ או רשימת מטלות.\nאת צריכה שינוי אמיתי — מבפנים.',
+      process_text2: 'בקבוצה תעברי תהליך מעשי ועמוק שיעזור לך\nלזהות את הדפוסים שמחזיקים אותך תקועה,\nלקבל החלטות מתוך ביטחון ולא מתוך לחץ,\nולנהל את הרגשות שלך בחוכמה וביציבות.',
+      process_text3: 'תהליך שמשנה את הדרך שבה את חווה את היום יום —\nמול הילדים, מול בן הזוג, ובעיקר מול עצמך.',
+      testimonial_text: '״הגעתי לקבוצה בתחושה שאני טובעת. תוך כמה מפגשים הרגשתי שינוי שגם בעלי וגם הילדים שלי הרגישו. היום אני לא אותה אישה — אני יותר רגועה, יותר נוכחת, ויותר מרוצה ממי שאני.״',
+      testimonial_cite: '— מ.ר., אמא ל-5, ירושלים',
+      about_title: 'מי היא אורית עשור?',
+      about_text1: 'אמא ל-9, בעלת משרד רואי חשבון, ואישה שחיה בדיוק את מה שהיא מלמדת.',
+      about_text2: 'אורית לא מדברת מתוך תיאוריה — היא מנהלת קריירה תובענית, בית גדול ומלא חיים, ויודעת בדיוק איך זה מרגיש כשהכל קורה בבת אחת.',
+      about_text3: 'אחרי שנים של ליווי נשים, היא פיתחה שיטה ייחודית ומעשית שעוזרת לנשים לצאת מהמרוץ — בלי לוותר על כלום. השיטה עובדת, והתוצאות מדברות בעד עצמן.',
+      details_title: 'הקבוצה הבאה מתחילה בקרוב',
+      cta_note: 'המקומות מוגבלים — ההרשמה לפי סדר הגעה'
+    };
+
+    // Load saved or defaults into textareas
+    function loadFields() {
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) {}
+
+      var areas = document.querySelectorAll('[data-key]');
+      for (var i = 0; i < areas.length; i++) {
+        var key = areas[i].getAttribute('data-key');
+        areas[i].value = saved[key] !== undefined ? saved[key] : (defaults[key] || '');
+      }
+    }
+
+    function saveAll() {
+      var data = {};
+      var areas = document.querySelectorAll('[data-key]');
+      for (var i = 0; i < areas.length; i++) {
+        data[areas[i].getAttribute('data-key')] = areas[i].value;
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      showToast();
+    }
+
+    function resetAll() {
+      if (!confirm('בטוח? כל השינויים יימחקו ויחזרו לטקסט המקורי.')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      loadFields();
+      showToast('הטקסטים אופסו לברירת מחדל');
+    }
+
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg || 'השינויים נשמרו בהצלחה!';
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 2500);
+    }
+
+    loadFields();
+  </script>
+
+</body>
+</html>
