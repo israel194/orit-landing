@@ -29,81 +29,81 @@
 
     /* עטיפה — קבועה בצד ימין באמצע */
     #acc-wrap {
-      position: fixed; right: 0; top: 50%; z-index: 900;
+      position: fixed; right: 10px; top: 50%; z-index: 900;
       transform: translateY(-50%);
-      display: flex; align-items: center;
-      transition: transform 300ms;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
     }
-    #acc-wrap.hidden { transform: translateY(-50%) translateX(calc(100% - 28px)); }
+    #acc-wrap.hidden { display: none; }
 
-    /* כפתור הסתרה (X) — נראה תמיד בצד שמאל של העטיפה */
-    #acc-hide {
-      width: 28px; align-self: stretch; background: #003f8a; color: #fff;
-      border: none; cursor: pointer; font-size: 0.75rem; font-weight: 700;
-      border-radius: 8px 0 0 8px; display: flex; align-items: center;
-      justify-content: center; writing-mode: vertical-rl;
-      letter-spacing: 0.05em; flex-shrink: 0;
+    /* איקס קטן מעל העיגול */
+    #acc-dismiss {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(0,0,0,0.35); color: #fff; border: none; cursor: pointer;
+      font-size: 0.6rem; font-weight: 700; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
       transition: background 150ms;
     }
-    #acc-hide:hover { background: #002a5e; }
-    #acc-hide:focus { outline: 3px solid #ffdd00; }
+    #acc-dismiss:hover { background: rgba(0,0,0,0.6); }
+    #acc-dismiss:focus { outline: 2px solid #ffdd00; }
 
-    /* לשונית "נגישות" — נראית כשהפאנל מוסתר */
-    #acc-tab {
-      display: none; position: absolute; left: -62px; top: 50%;
-      transform: translateY(-50%) rotate(180deg);
+    /* העיגול הראשי */
+    #acc-btn {
+      width: 44px; height: 44px; border-radius: 50%;
       background: #0057b8; color: #fff; border: none; cursor: pointer;
-      padding: 10px 8px; border-radius: 0 8px 8px 0;
-      font-size: 0.78rem; font-weight: 700; writing-mode: vertical-rl;
-      letter-spacing: 0.08em; box-shadow: -3px 0 12px rgba(0,0,0,0.2);
-      font-family: 'Assistant', sans-serif;
+      font-size: 1.3rem; box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 180ms, box-shadow 180ms;
     }
-    #acc-wrap.hidden #acc-tab { display: flex; align-items: center; justify-content: center; }
-    #acc-tab:focus { outline: 3px solid #ffdd00; }
+    #acc-btn:hover { transform: scale(1.08); box-shadow: 0 5px 16px rgba(0,0,0,0.4); }
+    #acc-btn:focus { outline: 3px solid #ffdd00; outline-offset: 2px; }
 
-    /* הפאנל עצמו */
+    /* פאנל האפשרויות — נפתח שמאלה מהעיגול */
     #acc-panel {
-      background: #fff; border-radius: 12px 0 0 12px;
-      box-shadow: -4px 0 24px rgba(0,0,0,0.18); padding: 14px 14px 12px;
-      direction: rtl; border: 1px solid #ddd; border-right: none;
-      width: 230px; max-height: 90vh; overflow-y: auto;
+      position: fixed; right: 64px; top: 50%; z-index: 901;
+      transform: translateY(-50%);
+      background: #fff; border-radius: 12px;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.2); padding: 12px;
+      direction: rtl; border: 1px solid #ddd;
+      width: 210px; max-height: 85vh; overflow-y: auto;
+      display: none;
     }
+    #acc-panel.open { display: block; }
     #acc-panel h3 {
-      font-size: 0.85rem; font-weight: 700; color: #0057b8;
-      margin-bottom: 10px; padding-bottom: 8px;
+      font-size: 0.78rem; font-weight: 700; color: #0057b8;
+      margin-bottom: 8px; padding-bottom: 6px;
       border-bottom: 1px solid #eee; text-align: center;
     }
     .acc-row {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 7px 4px; border-bottom: 1px solid #f0f0f0;
-      font-size: 0.82rem; color: #333;
+      padding: 5px 2px; border-bottom: 1px solid #f0f0f0;
+      font-size: 0.78rem; color: #333;
     }
     .acc-row:last-child { border-bottom: none; }
     .acc-controls { display: flex; gap: 4px; align-items: center; }
     .acc-btn-sm {
-      width: 30px; height: 30px; border-radius: 6px; border: 1px solid #ddd;
-      background: #f5f5f5; cursor: pointer; font-size: 0.85rem; font-weight: 700;
+      width: 26px; height: 26px; border-radius: 5px; border: 1px solid #ddd;
+      background: #f5f5f5; cursor: pointer; font-size: 0.78rem; font-weight: 700;
       display: flex; align-items: center; justify-content: center; color: #333;
       transition: background 150ms;
     }
     .acc-btn-sm:hover { background: #0057b8; color: #fff; border-color: #0057b8; }
     .acc-btn-sm:focus { outline: 2px solid #ffdd00; }
     .acc-toggle {
-      width: 40px; height: 22px; border-radius: 11px; border: none;
+      width: 34px; height: 18px; border-radius: 9px; border: none;
       background: #ccc; cursor: pointer; position: relative; transition: background 200ms;
       flex-shrink: 0;
     }
     .acc-toggle::after {
-      content: ''; position: absolute; top: 3px; right: 3px;
-      width: 16px; height: 16px; border-radius: 50%; background: #fff;
+      content: ''; position: absolute; top: 2px; right: 2px;
+      width: 14px; height: 14px; border-radius: 50%; background: #fff;
       transition: transform 200ms;
     }
     .acc-toggle.on { background: #0057b8; }
-    .acc-toggle.on::after { transform: translateX(-18px); }
+    .acc-toggle.on::after { transform: translateX(-16px); }
     .acc-reset {
-      width: 100%; margin-top: 10px; padding: 8px; border-radius: 8px;
+      width: 100%; margin-top: 8px; padding: 6px; border-radius: 6px;
       background: #f5f5f5; border: 1px solid #ddd; cursor: pointer;
-      font-size: 0.8rem; color: #555; font-family: 'Assistant', sans-serif;
+      font-size: 0.75rem; color: #555; font-family: 'Assistant', sans-serif;
       transition: background 150ms;
     }
     .acc-reset:hover { background: #e5e5e5; }
@@ -145,7 +145,8 @@
     #cookie-decline:hover { border-color: #7a7d9a; color: #e8e8f0; }
 
     @media (max-width: 600px) {
-      #acc-panel { width: 200px; }
+      #acc-wrap { right: 6px; }
+      #acc-panel { right: 58px; width: 190px; }
       #cookie-banner { padding: 12px 14px; gap: 10px; }
       #cookie-banner p { font-size: 0.8rem; }
     }
@@ -374,8 +375,10 @@
 
   <!-- ===== ACCESSIBILITY WIDGET ===== -->
   <div id="acc-wrap" role="region" aria-label="תפריט נגישות">
-    <button id="acc-hide" onclick="hideAcc()" aria-label="הסתר תפריט נגישות" title="הסתר">✕</button>
-    <div id="acc-panel" role="dialog" aria-label="אפשרויות נגישות">
+    <button id="acc-dismiss" onclick="hideAcc()" aria-label="הסתר תפריט נגישות" title="הסתר">✕</button>
+    <button id="acc-btn" onclick="toggleAcc()" aria-label="פתח תפריט נגישות" aria-expanded="false" title="נגישות">♿</button>
+  </div>
+  <div id="acc-panel" role="dialog" aria-label="אפשרויות נגישות">
     <h3>♿ נגישות</h3>
     <div class="acc-row">
       <span>גודל גופן</span>
@@ -409,12 +412,10 @@
       <button class="acc-toggle" id="tog-anim" onclick="toggleClass('acc-no-anim','tog-anim')" aria-pressed="false" aria-label="עצור אנימציות"></button>
     </div>
     <button class="acc-reset" onclick="resetAcc()">↺ איפוס הגדרות</button>
-    <p style="font-size:0.72rem;color:#888;margin-top:8px;text-align:center;">
-      האתר עומד בתקן נגישות ישראלי AA<br>לפניות: <a href="mailto:israel@asor-law.com" style="color:#0057b8;">israel@asor-law.com</a>
+    <p style="font-size:0.68rem;color:#888;margin-top:6px;text-align:center;">
+      תקן נגישות ישראלי AA<br><a href="mailto:israel@asor-law.com" style="color:#0057b8;">israel@asor-law.com</a>
     </p>
-    </div><!-- /acc-panel -->
-    <button id="acc-tab" onclick="showAcc()" aria-label="פתח תפריט נגישות">נגישות ♿</button>
-  </div><!-- /acc-wrap -->
+  </div><!-- /acc-panel -->
 
   <!-- ===== COOKIE BANNER ===== -->
   <div id="cookie-banner" role="region" aria-label="הודעת קבצי עוגיות">
@@ -547,14 +548,26 @@
     }
     // ===== ACCESSIBILITY =====
     var _fontSize = 0;
+    function toggleAcc() {
+      var panel = document.getElementById('acc-panel');
+      var btn = document.getElementById('acc-btn');
+      var isOpen = panel.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen);
+    }
     function hideAcc() {
       document.getElementById('acc-wrap').classList.add('hidden');
+      document.getElementById('acc-panel').classList.remove('open');
       localStorage.setItem('acc_hidden', '1');
     }
-    function showAcc() {
-      document.getElementById('acc-wrap').classList.remove('hidden');
-      localStorage.removeItem('acc_hidden');
-    }
+    // Close panel on outside click
+    document.addEventListener('click', function(e) {
+      var panel = document.getElementById('acc-panel');
+      var btn = document.getElementById('acc-btn');
+      if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== btn) {
+        panel.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
     // Restore hidden state
     if (localStorage.getItem('acc_hidden')) {
       document.getElementById('acc-wrap').classList.add('hidden');
